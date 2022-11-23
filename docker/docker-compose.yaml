@@ -1,9 +1,24 @@
 version: '3'
 
 services:
+  appnode:
+    container_name: appnode
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    networks:
+      - node-network
+    volumes:
+      - ./node:/usr/src/app
+    tty: true
+    ports:
+    - "3000:3000"
+    depends_on:
+      - dbnode
+
   dbnode:
-    image: mysql:latest
-    command: --innobd-use-native-aio=0
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
     container_name: dbnode
     restart: always
     tty: true
@@ -12,7 +27,7 @@ services:
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_ROOT=root
+      # - MYSQL_ROOT=root
     networks:
       - node-network
 
