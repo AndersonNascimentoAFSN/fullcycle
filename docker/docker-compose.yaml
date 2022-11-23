@@ -3,6 +3,8 @@ version: '3'
 services:
   appnode:
     container_name: appnode
+    entrypoint: dockerize -wait tcp://dbnode:3306 -timeout 20s ./docker-entrypoint.sh
+    # entrypoint: dockerize -wait tcp://dbnode:3306 -timeout 20s node index.js
     build:
       context: ./node
       dockerfile: Dockerfile
